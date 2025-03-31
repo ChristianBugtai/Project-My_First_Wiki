@@ -13,7 +13,7 @@ const router: Router = express.Router();
 
 const COLLECTION:string = "Treasure"
 
-// "/api/v1/items"
+// "/api/v1/treasures"
 router.get("/:id", getEntryById<Treasure>(COLLECTION));
 router.get("/", getEntries<Treasure>(COLLECTION));
 router.post("/", addEntry<Treasure>(COLLECTION));
