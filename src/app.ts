@@ -6,11 +6,8 @@ dotenv.config();
 import itemRoutes from "./api/v1/routes/itemRoutes";
 
 const app: Express = express();
+app.use(express.json());
 
-app.get("/", (req, res) => {
-    res.send("Hello, World!")
-});
-
-app.get("/api/v1/items", itemRoutes);
+app.use("/api/v1/items", itemRoutes);
 
 export default app;

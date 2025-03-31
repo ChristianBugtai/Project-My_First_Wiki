@@ -12,7 +12,7 @@ export const getDocumentById = async (
 ): Promise<void> => {
     try{
         const data = await firestore.getDocumentById<Item>(COLLECTION, req.params.id);
-        res.status(200).send(`Items Retrieved ${data}`);
+        res.status(200).json({message: `Item Retrieved`, data: data});
     } catch (error) {
         next(error)
     }
@@ -25,7 +25,7 @@ export const getDocuments = async (
 ): Promise<void> => {
     try{
         const data = await firestore.getDocuments<Item>(COLLECTION);
-        res.status(200).send(`Item Retrieved ${data}`);
+        res.status(200).json({message: `Items Retrieved`, data: data});
     } catch (error) {
         next(error)
     }
@@ -38,7 +38,7 @@ export const addDocument = async (
 ): Promise<void> => {
     try{
         const data = await firestore.addDocument<Item>(COLLECTION, req.body)
-        res.status(200).send(`Item Added, ${data}`);
+        res.status(200).json({message:`Item Added`, data: data});
     } catch (error) {
         next(error)
     }
@@ -51,7 +51,7 @@ export const updateDocument = async (
 ): Promise<void> => {
     try{
         const data = await firestore.updateDocument<Item>(COLLECTION, req.params.id, req.body)
-        res.status(200).send(`Item Updated, ${data}`);
+        res.status(200).json({message: `Item Updated`, data: data});
     } catch (error) {
         next(error)
     }
@@ -64,7 +64,7 @@ export const deleteDocument = async (
 ): Promise<void> => {
     try{
         const id = await firestore.deleteDocument(COLLECTION, req.params.id)
-        res.status(200).send(`Item ${id} Deleted`);
+        res.status(200).json({mesasge: `Item ${id} Deleted`});
     } catch (error) {
         next(error)
     }
