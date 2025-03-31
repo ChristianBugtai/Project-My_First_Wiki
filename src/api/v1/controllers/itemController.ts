@@ -1,40 +1,70 @@
 import { Request, Response, NextFunction } from "express";
 
-export const getItem = (req: Request, res: Response, next: NextFunction) => {
+import type { Item } from "../models/gameModels"
+import * as firestore from "../repositories/firestoreRepository"
+
+const COLLECTION = "ITEMS"
+
+export const getDocumentById = async (
+    req: Request, 
+    res: Response, 
+    next: NextFunction
+): Promise<void> => {
     try{
-        res.status(200).send("Items Retrieved");
+        const data = await firestore.getDocumentById<Item>(COLLECTION, req.params.id);
+        res.status(200).send(`Items Retrieved ${data}`);
     } catch (error) {
         next(error)
     }
 };
 
-export const getItems = (req: Request, res: Response, next: NextFunction) => {
+export const getDocuments = async (
+    req: Request, 
+    res: Response, 
+    next: NextFunction
+): Promise<void> => {
     try{
-        res.status(200).send("Item Retrieved");
+        const data = await firestore.getDocuments<Item>(COLLECTION);
+        res.status(200).send(`Item Retrieved ${data}`);
     } catch (error) {
         next(error)
     }
 };
 
-export const addItem = (req: Request, res: Response, next: NextFunction) => {
+export const addDocument = async (
+    req: Request, 
+    res: Response, 
+    next: NextFunction
+): Promise<void> => {
     try{
-        res.status(200).send("Item Added");
+        const data = await firestore.addDocument<Item>(COLLECTION, req.body)
+        res.status(200).send(`Item Added, ${data}`);
     } catch (error) {
         next(error)
     }
 };
 
-export const updateItem = (req: Request, res: Response, next: NextFunction) => {
+export const updateDocument = async (
+    req: Request, 
+    res: Response, 
+    next: NextFunction
+): Promise<void> => {
     try{
-        res.status(200).send("Item Updated");
+        const data = await firestore.updateDocument<Item>(COLLECTION, req.params.id, req.body)
+        res.status(200).send(`Item Updated, ${data}`);
     } catch (error) {
         next(error)
     }
 };
 
-export const deleteItem = (req: Request, res: Response, next: NextFunction) => {
+export const deleteDocument = async (
+    req: Request, 
+    res: Response, 
+    next: NextFunction
+): Promise<void> => {
     try{
-        res.status(200).send("Item Deleted");
+        const id = await firestore.deleteDocument(COLLECTION, req.params.id)
+        res.status(200).send(`Item ${id} Deleted`);
     } catch (error) {
         next(error)
     }
