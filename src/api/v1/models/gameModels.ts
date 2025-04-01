@@ -2,14 +2,14 @@ export type Item = {
     name:string;
     description: string;
     img: string;
-    price?: number
+    price?: string
 };
 
 export type Monster = {
     name:string;
     description: string;
     img: string;
-    health?: number
+    health?: string
 };
 
 export type Location = {
@@ -22,5 +22,5 @@ export type Treasure = {
     name:string;
     description: string;
     img: string;
-    value?: number
+    value?: string
 };
