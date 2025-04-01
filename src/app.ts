@@ -11,6 +11,19 @@ import treasureRoutes from "./api/v1/routes/treasureRoutes";
 const app: Express = express();
 app.use(express.json());
 
+app.get("/", (req, res) => {
+    res.send("Hello, world!");
+});
+
+app.get("/api/v1/health", (req, res) => {
+    res.json({
+        status: "OK",
+        uptime: process.uptime(),
+        timestamp: new Date().toISOString(),
+        version: "1.0.0",
+    });
+});
+
 app.use("/api/v1/items", itemRoutes);
 app.use("/api/v1/locations", locationRoutes);
 app.use("/api/v1/monsters", monsterRoutes);
