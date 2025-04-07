@@ -21,10 +21,10 @@ export const getDocumentById = async <T> (
             ...data
         };
 	} catch (error) {
-		console.error(
-			`Failed to fetch document ${id} from ${collectionName}:`,
-			error
-		);
+		//console.error(
+		//	`Failed to fetch document ${id} from ${collectionName}:`,
+		//	error
+		//);
 		throw error;
 	}
 };
@@ -43,10 +43,10 @@ export const getDocuments = async <T> (
             }
         })
 	} catch (error) {
-		console.error(
-			`Failed to fetch documents from ${collectionName}:`,
-			error
-		);
+		//console.error(
+		//	`Failed to fetch documents from ${collectionName}:`,
+		//	error
+		//);
 		throw error;
 	}
 };
@@ -68,7 +68,7 @@ export const addDocument = async <T extends object> (
             ...savedData,
         }
     } catch (error) {
-		console.error(`Failed to create document in ${collectionName}:`, error);
+		//console.error(`Failed to create document in ${collectionName}:`, error);
 		throw error;
 	}
 };
@@ -90,10 +90,10 @@ export const updateDocument = async <T> (
             ...updatedData
         }
 	} catch (error) {
-		console.error(
-			`Failed to update document ${id} in ${collectionName}:`,
-			error
-		);
+		//console.error(
+		//	`Failed to update document ${id} in ${collectionName}:`,
+		//	error
+		//);
 		throw error;
 	}
 };
@@ -109,10 +109,10 @@ export const deleteDocument = async (
 		await docRef.delete();
         return id;
 	} catch (error) {
-		console.error(
-			`Failed to delete document ${id} from ${collectionName}:`,
-			error
-		);
+		//console.error(
+		//	`Failed to delete document ${id} from ${collectionName}:`,
+		//	error
+		//);
 		throw error;
 	}
 };
