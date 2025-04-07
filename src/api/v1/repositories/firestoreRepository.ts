@@ -1,5 +1,11 @@
 import { db } from "../../../../config/firebaseConfig";
 
+/**
+ * @description retrieves a document in firestore given a collection name and id.
+ * @param {string} collectionName name of the collection.
+ * @param {string} id id of document.
+ * @returns {T} a json file with the id and all the fields in the collection.
+ */
 export const getDocumentById = async <T> (
 	collectionName: string,
 	id: string
@@ -29,6 +35,11 @@ export const getDocumentById = async <T> (
 	}
 };
 
+/**
+ * @description Retrieves all the documents from a firestore collection.
+ * @param {string} collectionName name of the collection.
+ * @returns {T} a list of json files with the id and all the fields in the collection.
+ */
 export const getDocuments = async <T> (
 	collectionName: string
 ): Promise<Array<T & { id: string }>> => {
@@ -51,6 +62,11 @@ export const getDocuments = async <T> (
 	}
 };
 
+/**
+ * @description aadds a document to a given collection.
+ * @param {string} collectionName name of the collection.
+ * @returns {T} a json file with the id and all the fields in the collection of the added document.
+ */
 export const addDocument = async <T extends object> (
     collectionName: string,
     data: T,
@@ -73,6 +89,12 @@ export const addDocument = async <T extends object> (
 	}
 };
 
+/**
+ * @description Updates the data of the document given its id and colection.
+ * @param {string} collectionName name of the collection.
+ * @param {string} id id of document.
+ * @returns {T} a json file with the id and all the fields in the collection of the updated document.
+ */
 export const updateDocument = async <T> (
 	collectionName: string,
 	id: string,
@@ -98,6 +120,12 @@ export const updateDocument = async <T> (
 	}
 };
 
+/**
+ * @description Deletes a document given its id and colection.
+ * @param {string} collectionName name of the collection.
+ * @param {string} id id of document.
+ * @returns {string} the id of the deleted document.
+ */
 export const deleteDocument = async (
 	collectionName: string,
 	id: string,
