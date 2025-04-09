@@ -1,6 +1,8 @@
 import express, { Router } from "express";
 
 import type { Item } from "../models/gameModels"
+import authenticate  from "../middleware/authentication";
+import isAuthorized from "../middleware/authorization";
 import {
     getEntryById,
     getEntries,
@@ -42,7 +44,10 @@ const COLLECTION:string = "Item"
  *       404:
  *         description: Item not found
  */
-router.get("/:id", getEntryById<Item>(COLLECTION));
+router.get(
+    "/:id",
+    getEntryById<Item>(COLLECTION)
+);
 
 /**
  * @route GET /
@@ -65,7 +70,10 @@ router.get("/:id", getEntryById<Item>(COLLECTION));
  *               items:
  *                 $ref: '#/components/schemas/Item'
  */
-router.get("/", getEntries<Item>(COLLECTION));
+router.get(
+    "/", 
+    getEntries<Item>(COLLECTION)
+);
 
 /**
  * @route POST /
@@ -94,7 +102,12 @@ router.get("/", getEntries<Item>(COLLECTION));
  *       400:
  *         description: Invalid input
  */
-router.post("/", addEntry<Item>(COLLECTION));
+router.post(
+    "/",
+    authenticate,
+    isAuthorized({ hasRole: ["admin", "trustedContributor"] }),
+    addEntry<Item>(COLLECTION)
+);
 
 /**
  * @route PUT /:id
@@ -130,7 +143,12 @@ router.post("/", addEntry<Item>(COLLECTION));
  *       404:
  *         description: Item not found
  */
-router.put("/:id", updateEntry<Item>(COLLECTION));
+router.put(
+    "/:id",
+    authenticate,
+    isAuthorized({ hasRole: ["admin", "contributor", "trustedContributor"] }),
+    updateEntry<Item>(COLLECTION)
+);
 
 /**
  * @route DELETE /:id
@@ -156,6 +174,11 @@ router.put("/:id", updateEntry<Item>(COLLECTION));
  *       404:
  *         description: Item not found
  */
-router.delete("/:id", deleteEntry(COLLECTION));
+router.delete(
+    "/:id",
+    authenticate,
+    isAuthorized({ hasRole: ["admin", "trustedContributor"] }),
+    deleteEntry(COLLECTION)
+);
 
 export default router;

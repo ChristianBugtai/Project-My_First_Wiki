@@ -1,6 +1,8 @@
 import express, { Router } from "express";
 
 import type { Location } from "../models/gameModels"
+import authenticate  from "../middleware/authentication";
+import isAuthorized from "../middleware/authorization";
 import {
     getEntryById,
     getEntries,
@@ -42,7 +44,10 @@ const COLLECTION:string = "Location"
  *       404:
  *         description: Location not found
  */
-router.get("/:id", getEntryById<Location>(COLLECTION));
+router.get(
+    "/:id", 
+    getEntryById<Location>(COLLECTION)
+);
 
 /**
  * @route GET /
@@ -65,7 +70,10 @@ router.get("/:id", getEntryById<Location>(COLLECTION));
  *               items:
  *                 $ref: '#/components/schemas/Location'
  */
-router.get("/", getEntries<Location>(COLLECTION));
+router.get(
+    "/", 
+    getEntries<Location>(COLLECTION)
+);
 
 /**
  * @route POST /
@@ -94,7 +102,12 @@ router.get("/", getEntries<Location>(COLLECTION));
  *       400:
  *         description: Invalid input
  */
-router.post("/", addEntry<Location>(COLLECTION));
+router.post(
+    "/",
+    authenticate,
+    isAuthorized({ hasRole: ["admin", "trustedContributor"] }),
+    addEntry<Location>(COLLECTION)
+);
 
 /**
  * @route PUT /:id
@@ -130,7 +143,12 @@ router.post("/", addEntry<Location>(COLLECTION));
  *       404:
  *         description: Location not found
  */
-router.put("/:id", updateEntry<Location>(COLLECTION));
+router.put(
+    "/:id",
+    authenticate,
+    isAuthorized({ hasRole: ["admin", "contributor", "trustedContributor"] }),
+    updateEntry<Location>(COLLECTION)
+);
 
 /**
  * @route DELETE /:id
@@ -156,6 +174,11 @@ router.put("/:id", updateEntry<Location>(COLLECTION));
  *       404:
  *         description: Location not found
  */
-router.delete("/:id", deleteEntry(COLLECTION));
+router.delete(
+    "/:id",
+    authenticate,
+    isAuthorized({ hasRole: ["admin", "trustedContributor"] }),
+    deleteEntry(COLLECTION)
+);
 
 export default router;
