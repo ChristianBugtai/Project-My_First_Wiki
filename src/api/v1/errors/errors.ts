@@ -22,3 +22,23 @@ export class AppError extends Error {
         Error.captureStackTrace(this, this.constructor);
     }
 }
+
+/**
+ * Class representing a authentication error.
+ * Extends the built-in Error class to include an error code.
+ */
+export class AuthenticationError extends AppError {
+    /**
+     * Creates a new AuthenticationError instance.
+     * @param {string} message - The error message.
+     * @param {string} code - The error code.
+     * @param {number} statusCode - The http response code.
+     */
+    constructor(
+        message: string,
+        code: string = "AUTHENTICATION_ERROR",
+        statusCode: number = HTTP_STATUS.UNAUTHORIZED
+    ) {
+        super(message, code, statusCode);
+    }
+}
