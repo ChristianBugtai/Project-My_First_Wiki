@@ -30,7 +30,7 @@ app.use("/api/v1/items", itemRoutes);
 app.use("/api/v1/locations", locationRoutes);
 app.use("/api/v1/monsters", monsterRoutes);
 app.use("/api/v1/treasures", treasureRoutes);
-app.use("api/v1/admin", adminRoutes)
+app.use("/api/v1/admin", adminRoutes)
 
 //error handling
 app.use(errorHandler)
