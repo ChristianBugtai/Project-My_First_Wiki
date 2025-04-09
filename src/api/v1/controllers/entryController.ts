@@ -1,6 +1,8 @@
 import { Request, Response, NextFunction } from "express";
 
 import * as firestore from "../repositories/firestoreRepository"
+import { HTTP_STATUS } from "../../../constants/httpConstants";
+import { successResponse } from "../models/responseModel";
 
 /**
  * @description Get the entry of a given id from a given collection.
@@ -16,7 +18,10 @@ export const getEntryById = <T>(collectionName: string) => {
     ): Promise<void> => {
         try{
             const data = await firestore.getDocumentById<T>(collectionName, req.params.id);
-            res.status(200).json({message: `${collectionName} Retrieved`, data: data});
+
+            res.status(HTTP_STATUS.OK).json(
+                successResponse(data, `${collectionName} Retrieved`)
+            );
         } catch (error) {
             next(error)
         }
@@ -37,7 +42,10 @@ export const getEntries = <T>(collectionName: string) => {
     ): Promise<void> => {
         try{
             const data = await firestore.getDocuments<T>(collectionName);
-            res.status(200).json({message: `${collectionName}s Retrieved`, data: data});
+
+            res.status(HTTP_STATUS.OK).json(
+                successResponse(data, `${collectionName}s Retrieved`)
+            );
         } catch (error) {
             next(error)
         }
@@ -58,7 +66,10 @@ export const addEntry =  <T extends object>(collectionName: string) => {
     ): Promise<void> => {
         try{
             const data = await firestore.addDocument<T>(collectionName, req.body)
-            res.status(201).json({message:`${collectionName} Added`, data: data});
+
+            res.status(HTTP_STATUS.CREATED).json(
+                successResponse(data, `${collectionName} Added`)
+            );
         } catch (error) {
             next(error)
         }
@@ -79,7 +90,10 @@ export const updateEntry =  <T>(collectionName: string) => {
     ): Promise<void> => {
         try{
             const data = await firestore.updateDocument<T>(collectionName, req.params.id, req.body)
-            res.status(200).json({message: `${collectionName} Updated`, data: data});
+
+            res.status(HTTP_STATUS.OK).json(
+                successResponse(data, `${collectionName} Updated`)
+            );
         } catch (error) {
             next(error)
         }
@@ -100,7 +114,10 @@ export const deleteEntry = (collectionName: string) => {
     ): Promise<void> => {
         try{
             const id = await firestore.deleteDocument(collectionName, req.params.id)
-            res.status(200).json({mesasge: `${collectionName} ${id} Deleted`});
+
+            res.status(HTTP_STATUS.OK).json(
+                successResponse(undefined, `${collectionName} ${id} Deleted`)
+            );
         } catch (error) {
             next(error)
         }

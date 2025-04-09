@@ -36,7 +36,8 @@ describe("Controller Tests", () => {
             expect(res.status).toHaveBeenCalledWith(200);
             expect(res.json).toHaveBeenCalledWith({
                 message: "item Retrieved",
-                data: mockData
+                data: mockData,
+                status: "success"
             })
         })
     })
@@ -52,7 +53,8 @@ describe("Controller Tests", () => {
             expect(res.status).toHaveBeenCalledWith(200);
             expect(res.json).toHaveBeenCalledWith({
                 message: "locations Retrieved",
-                data: [mockData]
+                data: [mockData],
+                status: "success"
             })
         })
     })
@@ -69,6 +71,7 @@ describe("Controller Tests", () => {
             expect(res.json).toHaveBeenCalledWith({
                 message: "monster Added",
                 data: mockData,
+                status: "success"
             })
         })
     })
@@ -88,6 +91,7 @@ describe("Controller Tests", () => {
             expect(res.json).toHaveBeenCalledWith({
                 message: "treasure Updated",
                 data: mockData,
+                status: "success"
             })
         })
     })
@@ -102,7 +106,8 @@ describe("Controller Tests", () => {
 
             expect(res.status).toHaveBeenCalledWith(200);
             expect(res.json).toHaveBeenCalledWith({
-                mesasge: "item 101 Deleted",
+                message: "item 101 Deleted",
+                status: "success"
             })
         })
     })

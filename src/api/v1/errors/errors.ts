@@ -62,3 +62,29 @@ export class AuthorizationError extends AppError {
         super(message, code, statusCode);
     }
 }
+
+export class RepositoryError extends AppError {
+    /**
+     * Creates a new RepositoryError instance.
+     * @param {string} message - The error message.
+     * @param {string} code - The error code.
+     * @param {number} code - The the http response code.
+     */
+    constructor(
+        message: string,
+        code: string,
+        statusCode: number = HTTP_STATUS.INTERNAL_SERVER_ERROR
+    ) {
+        super(message, code, statusCode);
+    }
+}
+
+export class FirebaseError extends AppError{
+    constructor(
+        message: string,
+        code: string,
+        statusCode: number = HTTP_STATUS.BAD_REQUEST
+    ) {
+        super(message, code, statusCode);
+    }
+}
