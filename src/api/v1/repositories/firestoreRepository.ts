@@ -1,4 +1,11 @@
+import { error } from "console";
 import { db } from "../../../../config/firebaseConfig";
+import { RepositoryError } from "../errors/errors";
+import { 
+	getErrorCode, 
+	getErrorMessage, 
+	getFirebaseErrorStatusCode 
+} from "../utils/errorUtils";
 
 /**
  * @description retrieves a document in firestore given a collection name and id.
@@ -17,8 +24,10 @@ export const getDocumentById = async <T> (
 			.get();
         
             if (!doc.exists) {
-                throw new Error(
+                throw new RepositoryError(
                     `Document not found in collection ${collectionName} with id ${id}`,
+					"DOCUMENT_NOT_FOUND",
+					404
                 )
             }
         const data = doc.data() as T
@@ -26,13 +35,19 @@ export const getDocumentById = async <T> (
             id: doc.id,
             ...data
         };
-	} catch (error) {
-		//console.error(
-		//	`Failed to fetch document ${id} from ${collectionName}:`,
-		//	error
-		//);
-		throw error;
+	} catch (error: unknown) {
+		if (error instanceof RepositoryError){
+			throw error;
+		}
 	}
+
+	throw new RepositoryError(
+		`Failed to fetch document ${id} from ${collectionName}: ${getErrorMessage(
+			error
+		)}`,
+		getErrorCode(error),
+		getFirebaseErrorStatusCode(error)
+	)
 };
 
 /**
@@ -53,12 +68,14 @@ export const getDocuments = async <T> (
                 ...data
             }
         })
-	} catch (error) {
-		//console.error(
-		//	`Failed to fetch documents from ${collectionName}:`,
-		//	error
-		//);
-		throw error;
+	} catch (error: unknown) {
+		throw new RepositoryError(
+			`Failed to fetch documents from ${collectionName}: ${getErrorMessage(
+				error
+			)}`,
+			getErrorCode(error),
+			getFirebaseErrorStatusCode(error)
+		)
 	}
 };
 
@@ -83,9 +100,14 @@ export const addDocument = async <T extends object> (
             id: doc.id,
             ...savedData,
         }
-    } catch (error) {
-		//console.error(`Failed to create document in ${collectionName}:`, error);
-		throw error;
+    } catch (error: unknown) {
+		throw new RepositoryError(
+            `Failed to create document in ${collectionName}: ${getErrorMessage(
+                error
+            )}`,
+            getErrorCode(error),
+            getFirebaseErrorStatusCode(error)
+        );
 	}
 };
 
@@ -111,12 +133,14 @@ export const updateDocument = async <T> (
             id: updatedDoc.id,
             ...updatedData
         }
-	} catch (error) {
-		//console.error(
-		//	`Failed to update document ${id} in ${collectionName}:`,
-		//	error
-		//);
-		throw error;
+	} catch (error: unknown) {
+		throw new RepositoryError(
+            `Failed to update document ${id} in ${collectionName}: ${getErrorMessage(
+                error
+            )}`,
+            getErrorCode(error),
+            getFirebaseErrorStatusCode(error)
+        );
 	}
 };
 
@@ -136,11 +160,13 @@ export const deleteDocument = async (
 			.doc(id);
 		await docRef.delete();
         return id;
-	} catch (error) {
-		//console.error(
-		//	`Failed to delete document ${id} from ${collectionName}:`,
-		//	error
-		//);
-		throw error;
+	} catch (error: unknown) {
+		throw new RepositoryError(
+            `Failed to delete document ${id} from ${collectionName}: ${getErrorMessage(
+                error
+            )}`,
+            getErrorCode(error),
+            getFirebaseErrorStatusCode(error)
+        );
 	}
 };
