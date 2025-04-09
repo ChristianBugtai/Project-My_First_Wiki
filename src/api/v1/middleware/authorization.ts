@@ -8,7 +8,7 @@ type MiddlewareFunction = (
 ) => void;
 
 interface AuthorizationOptions {
-    hasRole: Array<"admin" | "manager" | "officer" | "user">;
+    hasRole: Array<"admin" | "contributor" | "trustedContributor">;
 }
 
 /**
@@ -34,7 +34,7 @@ const isAuthorized = (opts: AuthorizationOptions): MiddlewareFunction => {
         }
 
         // Allow access if the user's role is in the permitted roles list
-        if (opts.hasRole.includes(role as "admin" | "manager" | "officer" | "user")) {
+        if (opts.hasRole.includes(role as "admin" | "contributor" | "trustedContributor")) {
             return next();
         }
 
