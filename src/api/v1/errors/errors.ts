@@ -78,3 +78,13 @@ export class RepositoryError extends AppError {
         super(message, code, statusCode);
     }
 }
+
+export class FirebaseError extends AppError{
+    constructor(
+        message: string,
+        code: string,
+        statusCode: number = HTTP_STATUS.BAD_REQUEST
+    ) {
+        super(message, code, statusCode);
+    }
+}
