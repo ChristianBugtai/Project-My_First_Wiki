@@ -18,7 +18,7 @@ const errorHandler = (
     }
 
     // Log the error message for debugging
-    console.error(`Error: ${err.message}`);
+    // console.error(`Error: ${err.message}`);
 
     if (err instanceof AppError) {
         res.status(err.statusCode).json(errorResponse(err.message, err.code));
