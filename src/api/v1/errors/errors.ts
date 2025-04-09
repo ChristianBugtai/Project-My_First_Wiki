@@ -42,3 +42,23 @@ export class AuthenticationError extends AppError {
         super(message, code, statusCode);
     }
 }
+
+/**
+ * Class representing a authorization error.
+ * Extends the built-in Error class to include an error code.
+ */
+export class AuthorizationError extends AppError {
+    /**
+     * Creates a new AuthorizationError instance.
+     * @param {string} message - The error message.
+     * @param {string} code - The error code.
+     * @param {number} statusCode - The http response code.
+     */
+    constructor(
+        message: string,
+        code: string = "AUTHORIZATION_ERROR",
+        statusCode: number = HTTP_STATUS.FORBIDDEN
+    ) {
+        super(message, code, statusCode);
+    }
+}
