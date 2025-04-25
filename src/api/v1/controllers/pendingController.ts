@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import { Timestamp } from "node_modules/firebase-admin/lib/firestore";
+import { Timestamp } from "firebase-admin/firestore";
 
 import * as firestore from "../repositories/firestoreRepository"
 import { HTTP_STATUS } from "../../../constants/httpConstants";
