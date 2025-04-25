@@ -2,6 +2,11 @@ module.exports = {
     preset: "ts-jest",
     testEnvironment: "node",
     setupFilesAfterEnv: ["<rootDir>/test/jest.setup.ts"],
-};
-// 'preset: "ts-jest"': use ts-jest preset to handle TS files
-// 'testEnvironment: "node"': set environment to Node.js
+    testMatch: ["**/test/**/*.test.ts"], 
+    moduleFileExtensions: ["ts", "js", "json"],
+    moduleDirectories: ["node_modules", "src"], 
+    roots: ["<rootDir>/src", "<rootDir>/test"], 
+    transform: {
+      "^.+\\.ts$": "ts-jest", 
+    },
+  };

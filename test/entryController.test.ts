@@ -2,7 +2,13 @@ import { Request, Response, NextFunction } from "express";
 import * as controller from "../src/api/v1/controllers/entryController";
 import * as firestore from "../src/api/v1/repositories/firestoreRepository";
 
-jest.mock("../src/api/v1/repositories/firestoreRepository")
+jest.mock("../src/api/v1/repositories/firestoreRepository", () => ({
+    getDocumentById: jest.fn(),
+    getDocuments: jest.fn(),
+    addDocument: jest.fn(),
+    updateDocument: jest.fn(),
+    deleteDocument: jest.fn(),
+  }));
 
 const mockResponse = () => {
     const res: Partial<Response> = {};
