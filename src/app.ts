@@ -1,4 +1,7 @@
 import express, { Express } from "express";
+import morgan from "morgan";
+import helmet from "helmet";
+import cors from "cors";
 import dotenv from "dotenv";
 
 dotenv.config();
@@ -11,8 +14,18 @@ import managementRoutes from "./api/v1/routes/managementRoutes"
 import adminRoutes from "./api/v1/routes/adminRoutes"
 import errorHandler from "./api/v1/middleware/errorHandling";
 
+// initialize the express application
 const app: Express = express();
+
+// apply the default helmet security headers
+app.use(helmet());
+
+// configure CORS
+app.use(cors());
+
+app.use(morgan("combined"));
 app.use(express.json());
+
 
 app.get("/", (req, res) => {
     res.send("Hello, world!");
