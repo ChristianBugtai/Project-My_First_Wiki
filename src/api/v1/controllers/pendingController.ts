@@ -1,4 +1,5 @@
 import { Request, Response, NextFunction } from "express";
+import { Timestamp } from "node_modules/firebase-admin/lib/firestore";
 
 import * as firestore from "../repositories/firestoreRepository"
 import { HTTP_STATUS } from "../../../constants/httpConstants";
@@ -19,7 +20,7 @@ export const updatePendingEntry =  <T extends Object> (collectionName: string) =
         try{
             const entryData = { 
                 entry_id: req.params.id,
-                datetime: new Date(),
+                datetime: Timestamp.now(),
                 ... req.body
                 }; 
             const data = await firestore.addDocument<T>(collectionName, entryData)
