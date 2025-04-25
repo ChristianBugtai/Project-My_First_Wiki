@@ -80,6 +80,12 @@ export class RepositoryError extends AppError {
 }
 
 export class FirebaseError extends AppError{
+    /**
+     * Creates a new FirebaseError instance.
+     * @param {string} message - The error message.
+     * @param {string} code - The error code.
+     * @param {number} code - The the http response code.
+     */
     constructor(
         message: string,
         code: string,

@@ -182,6 +182,40 @@ router.delete(
     deleteEntry(COLLECTION)
 );
 
+/**
+ * @route POST /pending/:id
+ * @description Submit a monster update for approval (contributor access)
+ * 
+ * @openapi
+ * /app/v1/monsters/pending/{id}:
+ *   post:
+ *     summary: Submit a monster update for approval
+ *     tags: [Monster]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: ID of the monster being updated
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Monster'
+ *     responses:
+ *       201:
+ *         description: Update for {id} sent, awaiting approval.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Monster'
+ *       400:
+ *         description: Invalid input or submission error
+ */
 router.put(
     "/pending/:id",
     authenticate,

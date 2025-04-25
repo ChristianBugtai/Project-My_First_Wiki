@@ -6,8 +6,9 @@ import { HTTP_STATUS } from "../../../constants/httpConstants";
 import { successResponse } from "../models/responseModel";
 
 /**
- * @description Update the existing entry of the given id in a given collection.
- * @route PUT /
+ * @description Creates a new entity on a with entry_id and datetime on a pending database.
+ * @route POST /
+ * @param {string} id id of the main entry.
  * @param {string} collectionName name of the firebase collection 
  * @returns {promise<void>}
  */
