@@ -10,6 +10,7 @@ import {
     updateEntry,
     deleteEntry
 } from "../controllers/entryController"
+import { updatePendingEntry } from "../controllers/pendingController";
 
 const router: Router = express.Router();
 
@@ -146,7 +147,7 @@ router.post(
 router.put(
     "/:id",
     authenticate,
-    isAuthorized({ hasRole: ["admin", "contributor", "trustedContributor"] }),
+    isAuthorized({ hasRole: ["admin", "trustedContributor"] }),
     updateEntry<Location>(COLLECTION)
 );
 
@@ -179,6 +180,13 @@ router.delete(
     authenticate,
     isAuthorized({ hasRole: ["admin", "trustedContributor"] }),
     deleteEntry(COLLECTION)
+);
+
+router.put(
+    "/pending/:id",
+    authenticate,
+    isAuthorized({ hasRole: ["admin", "contributor" ] }),
+    updatePendingEntry<Location>("locationPending")
 );
 
 export default router;

@@ -7,6 +7,7 @@ import itemRoutes from "./api/v1/routes/itemRoutes";
 import locationRoutes from "./api/v1/routes/locationRoutes";
 import monsterRoutes from "./api/v1/routes/monsterRoutes";
 import treasureRoutes from "./api/v1/routes/treasureRoutes";
+import managementRoutes from "./api/v1/routes/managementRoutes"
 import adminRoutes from "./api/v1/routes/adminRoutes"
 import errorHandler from "./api/v1/middleware/errorHandling";
 
@@ -30,6 +31,7 @@ app.use("/api/v1/items", itemRoutes);
 app.use("/api/v1/locations", locationRoutes);
 app.use("/api/v1/monsters", monsterRoutes);
 app.use("/api/v1/treasures", treasureRoutes);
+app.use("/api/v1/manage", managementRoutes)
 app.use("/api/v1/admin", adminRoutes)
 
 //error handling
