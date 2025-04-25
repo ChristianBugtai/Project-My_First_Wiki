@@ -183,10 +183,45 @@ router.delete(
     deleteEntry(COLLECTION)
 );
 
+/**
+ * @route POST /pending/:id
+ * @description Submit an item update for approval (contributor access)
+ * 
+ * @openapi
+ * /app/v1/items/pending/{id}:
+ *   post:
+ *     summary: Submit an item update for approval
+ *     tags: [Item]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: ID of the item being updated
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Item'
+ *     responses:
+ *       201:
+ *         description: Update for ${id} sent, awaiting approval.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Item'
+ *       400:
+ *         description: Invalid input or submission error
+ */
 router.post(
     "/pending/:id",
     authenticate,
     isAuthorized({ hasRole: ["admin", "contributor" ] }),
     updatePendingEntry<Item>("itemPending")
 );
+
 export default router;

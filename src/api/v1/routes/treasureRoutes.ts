@@ -182,6 +182,40 @@ router.delete(
     deleteEntry(COLLECTION)
 );
 
+/**
+ * @route POST /pending/:id
+ * @description Submit a treasure update for approval (contributor access)
+ * 
+ * @openapi
+ * /app/v1/treasures/pending/{id}:
+ *   post:
+ *     summary: Submit a treasure update for approval
+ *     tags: [Treasure]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: ID of the treasure being updated
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Treasure'
+ *     responses:
+ *       201:
+ *         description: Update for {id} sent, awaiting approval.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Treasure'
+ *       400:
+ *         description: Invalid input or submission error
+ */
 router.put(
     "/pending/:id",
     authenticate,

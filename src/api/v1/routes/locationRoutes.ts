@@ -182,6 +182,40 @@ router.delete(
     deleteEntry(COLLECTION)
 );
 
+/**
+ * @route POST /pending/:id
+ * @description Submit a location update for approval (contributor access)
+ * 
+ * @openapi
+ * /app/v1/locations/pending/{id}:
+ *   post:
+ *     summary: Submit a location update for approval
+ *     tags: [Location]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: ID of the location being updated
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Location'
+ *     responses:
+ *       201:
+ *         description: Update for ${id} sent, awaiting approval.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Location'
+ *       400:
+ *         description: Invalid input or submission error
+ */
 router.put(
     "/pending/:id",
     authenticate,
