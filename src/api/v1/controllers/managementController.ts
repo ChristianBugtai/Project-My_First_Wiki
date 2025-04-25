@@ -5,7 +5,13 @@ import { successResponse } from "../models/responseModel";
 import { getDocumentsByFieldValue } from "../repositories/firestoreRepository";
 import { approvePendingEntry } from "../service/managementService"
 
-
+/**
+ * @description Get 5 pending updates on an entry.
+ * @route GET /:id
+ * @param {string} id id of the entry.
+ * @param {string} pendingCollectionName name of the pending firebase collection 
+ * @returns {promise<void>}
+ */
 export const getPendingEntries = (pendingCollectionName: string) => {
     return async (
         req: Request, 
@@ -24,6 +30,14 @@ export const getPendingEntries = (pendingCollectionName: string) => {
     }
 }
 
+/**
+ * @description updates the main database with the selected pending entry.
+ * @route GET /:id
+ * @param {string} id id of the pending entry.
+ * @param {string} collectionName name of the pending firebase collection
+ * @param {string} collectionName name of the main firebase collection 
+ * @returns {promise<void>}
+ */
 export const approveEntry = <T>(pendingCollectionName: string, collectionName: string) => {
     return async (
         req: Request, 
