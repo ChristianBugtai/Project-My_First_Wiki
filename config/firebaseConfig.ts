@@ -1,6 +1,11 @@
+import dotenv from 'dotenv';
+dotenv.config();
+
 import { initializeApp, cert, ServiceAccount, AppOptions, App, getApps } from "firebase-admin/app";
 import { getFirestore, Firestore } from "firebase-admin/firestore";
 import { getAuth, Auth } from "firebase-admin/auth"
+
+import { FirebaseError } from "../src/api/v1/errors/errors";
 
 /**
  * Retrieves Firebase configuration from environment variables
@@ -16,10 +21,11 @@ const getFirebaseConfig = (): AppOptions => {
         !FIREBASE_CLIENT_EMAIL ||
         !FIREBASE_PRIVATE_KEY
     ) {
-        // This really should be a custom error type
-        throw new Error(
-            "Missing Firebase configuaration. Please check your environment variables"
-        );
+        throw new FirebaseError(
+            "Missing Firebase Configuration",
+            "MISSING_CREDENTIALS",
+            400
+        )
     }
     const serviceAccount: ServiceAccount = {
         projectId: FIREBASE_PROJECT_ID,

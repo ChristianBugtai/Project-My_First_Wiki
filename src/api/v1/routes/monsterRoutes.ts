@@ -1,6 +1,8 @@
 import express, { Router } from "express";
 
 import type { Monster } from "../models/gameModels"
+import authenticate  from "../middleware/authentication";
+import isAuthorized from "../middleware/authorization";
 import {
     getEntryById,
     getEntries,
@@ -8,6 +10,7 @@ import {
     updateEntry,
     deleteEntry
 } from "../controllers/entryController"
+import { updatePendingEntry } from "../controllers/pendingController";
 
 const router: Router = express.Router();
 
@@ -42,7 +45,10 @@ const COLLECTION:string = "Monster"
  *       404:
  *         description: Monster not found
  */
-router.get("/:id", getEntryById<Monster>(COLLECTION));
+router.get(
+    "/:id", 
+    getEntryById<Monster>(COLLECTION)
+);
 
 /**
  * @route GET /
@@ -65,7 +71,10 @@ router.get("/:id", getEntryById<Monster>(COLLECTION));
  *               items:
  *                 $ref: '#/components/schemas/Monster'
  */
-router.get("/", getEntries<Monster>(COLLECTION));
+router.get(
+    "/", 
+    getEntries<Monster>(COLLECTION)
+);
 
 /**
  * @route POST /
@@ -94,7 +103,12 @@ router.get("/", getEntries<Monster>(COLLECTION));
  *       400:
  *         description: Invalid input
  */
-router.post("/", addEntry<Monster>(COLLECTION));
+router.post(
+    "/",
+    authenticate,
+    isAuthorized({ hasRole: ["admin", "trustedContributor"] }),
+    addEntry<Monster>(COLLECTION)
+);
 
 /**
  * @route PUT /:id
@@ -130,7 +144,12 @@ router.post("/", addEntry<Monster>(COLLECTION));
  *       404:
  *         description: Monster not found
  */
-router.put("/:id", updateEntry<Monster>(COLLECTION));
+router.put(
+    "/:id",
+    authenticate,
+    isAuthorized({ hasRole: ["admin", "trustedContributor"] }),
+    updateEntry<Monster>(COLLECTION)
+);
 
 /**
  * @route DELETE /:id
@@ -156,6 +175,18 @@ router.put("/:id", updateEntry<Monster>(COLLECTION));
  *       404:
  *         description: Monster not found
  */
-router.delete("/:id", deleteEntry(COLLECTION));
+router.delete(
+    "/:id",
+    authenticate,
+    isAuthorized({ hasRole: ["admin", "trustedContributor"] }),
+    deleteEntry(COLLECTION)
+);
+
+router.put(
+    "/pending/:id",
+    authenticate,
+    isAuthorized({ hasRole: ["admin", "contributor" ] }),
+    updatePendingEntry<Monster>("monsterPending")
+);
 
 export default router;

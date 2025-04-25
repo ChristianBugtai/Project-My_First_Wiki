@@ -2,7 +2,13 @@ import { Request, Response, NextFunction } from "express";
 import * as controller from "../src/api/v1/controllers/entryController";
 import * as firestore from "../src/api/v1/repositories/firestoreRepository";
 
-jest.mock("../src/api/v1/repositories/firestoreRepository")
+jest.mock("../src/api/v1/repositories/firestoreRepository", () => ({
+    getDocumentById: jest.fn(),
+    getDocuments: jest.fn(),
+    addDocument: jest.fn(),
+    updateDocument: jest.fn(),
+    deleteDocument: jest.fn(),
+  }));
 
 const mockResponse = () => {
     const res: Partial<Response> = {};
@@ -36,7 +42,8 @@ describe("Controller Tests", () => {
             expect(res.status).toHaveBeenCalledWith(200);
             expect(res.json).toHaveBeenCalledWith({
                 message: "item Retrieved",
-                data: mockData
+                data: mockData,
+                status: "success"
             })
         })
     })
@@ -52,7 +59,8 @@ describe("Controller Tests", () => {
             expect(res.status).toHaveBeenCalledWith(200);
             expect(res.json).toHaveBeenCalledWith({
                 message: "locations Retrieved",
-                data: [mockData]
+                data: [mockData],
+                status: "success"
             })
         })
     })
@@ -69,6 +77,7 @@ describe("Controller Tests", () => {
             expect(res.json).toHaveBeenCalledWith({
                 message: "monster Added",
                 data: mockData,
+                status: "success"
             })
         })
     })
@@ -88,6 +97,7 @@ describe("Controller Tests", () => {
             expect(res.json).toHaveBeenCalledWith({
                 message: "treasure Updated",
                 data: mockData,
+                status: "success"
             })
         })
     })
@@ -102,7 +112,8 @@ describe("Controller Tests", () => {
 
             expect(res.status).toHaveBeenCalledWith(200);
             expect(res.json).toHaveBeenCalledWith({
-                mesasge: "item 101 Deleted",
+                message: "item 101 Deleted",
+                status: "success"
             })
         })
     })

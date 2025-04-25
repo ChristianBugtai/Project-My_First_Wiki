@@ -1,4 +1,24 @@
+import { error } from "console";
+import { FieldValue, Timestamp } from "firebase-admin/firestore";
 import { db } from "../../../../config/firebaseConfig";
+import { RepositoryError } from "../errors/errors";
+import { 
+	getErrorCode, 
+	getErrorMessage, 
+	getFirebaseErrorStatusCode 
+} from "../utils/errorUtils";
+
+/**
+ * Defines the allowed data types that can be stored in Firestore.
+ * These types are restricted to ensure type safety when working with Firestore documents.
+ */
+type FirestoreDataTypes =
+    | string
+    | number
+    | boolean
+    | null
+    | Timestamp
+    | FieldValue;
 
 /**
  * @description retrieves a document in firestore given a collection name and id.
@@ -17,8 +37,10 @@ export const getDocumentById = async <T> (
 			.get();
         
             if (!doc.exists) {
-                throw new Error(
+                throw new RepositoryError(
                     `Document not found in collection ${collectionName} with id ${id}`,
+					"DOCUMENT_NOT_FOUND",
+					404
                 )
             }
         const data = doc.data() as T
@@ -26,13 +48,19 @@ export const getDocumentById = async <T> (
             id: doc.id,
             ...data
         };
-	} catch (error) {
-		//console.error(
-		//	`Failed to fetch document ${id} from ${collectionName}:`,
-		//	error
-		//);
-		throw error;
+	} catch (error: unknown) {
+		if (error instanceof RepositoryError){
+			throw error;
+		}
 	}
+
+	throw new RepositoryError(
+		`Failed to fetch document ${id} from ${collectionName}: ${getErrorMessage(
+			error
+		)}`,
+		getErrorCode(error),
+		getFirebaseErrorStatusCode(error)
+	)
 };
 
 /**
@@ -40,7 +68,7 @@ export const getDocumentById = async <T> (
  * @param {string} collectionName name of the collection.
  * @returns {T} a list of json files with the id and all the fields in the collection.
  */
-export const getDocuments = async <T> (
+export const getDocuments = async <T extends object> (
 	collectionName: string
 ): Promise<Array<T & { id: string }>> => {
 	try {
@@ -48,17 +76,27 @@ export const getDocuments = async <T> (
 
         return snapshot.docs.map((doc) => {
             const data = doc.data() as T;
+
+			// Only pick fields defined in the model (T)
+			const result = Object.fromEntries(
+				Object.keys(data)
+					.filter((key) => key in data)
+					.map((key) => [key, data[key as keyof T]])
+			) as T;
+
             return {
-                id: doc.id,
-                ...data
-            }
+				id: doc.id,
+				...result
+			}
         })
-	} catch (error) {
-		//console.error(
-		//	`Failed to fetch documents from ${collectionName}:`,
-		//	error
-		//);
-		throw error;
+	} catch (error: unknown) {
+		throw new RepositoryError(
+			`Failed to fetch documents from ${collectionName}: ${getErrorMessage(
+				error
+			)}`,
+			getErrorCode(error),
+			getFirebaseErrorStatusCode(error)
+		)
 	}
 };
 
@@ -83,9 +121,14 @@ export const addDocument = async <T extends object> (
             id: doc.id,
             ...savedData,
         }
-    } catch (error) {
-		//console.error(`Failed to create document in ${collectionName}:`, error);
-		throw error;
+    } catch (error: unknown) {
+		throw new RepositoryError(
+            `Failed to create document in ${collectionName}: ${getErrorMessage(
+                error
+            )}`,
+            getErrorCode(error),
+            getFirebaseErrorStatusCode(error)
+        );
 	}
 };
 
@@ -111,12 +154,14 @@ export const updateDocument = async <T> (
             id: updatedDoc.id,
             ...updatedData
         }
-	} catch (error) {
-		//console.error(
-		//	`Failed to update document ${id} in ${collectionName}:`,
-		//	error
-		//);
-		throw error;
+	} catch (error: unknown) {
+		throw new RepositoryError(
+            `Failed to update document ${id} in ${collectionName}: ${getErrorMessage(
+                error
+            )}`,
+            getErrorCode(error),
+            getFirebaseErrorStatusCode(error)
+        );
 	}
 };
 
@@ -136,11 +181,73 @@ export const deleteDocument = async (
 			.doc(id);
 		await docRef.delete();
         return id;
-	} catch (error) {
-		//console.error(
-		//	`Failed to delete document ${id} from ${collectionName}:`,
-		//	error
-		//);
-		throw error;
+	} catch (error: unknown) {
+		throw new RepositoryError(
+            `Failed to delete document ${id} from ${collectionName}: ${getErrorMessage(
+                error
+            )}`,
+            getErrorCode(error),
+            getFirebaseErrorStatusCode(error)
+        );
 	}
+};
+
+/**
+ * Retrieves all documents that match a specific field-value pair from a collection.
+ *
+ * @param collectionName - The name of the collection to search in
+ * @param fieldName - The name of the field to filter by
+ * @param fieldValue - The value to match against the field
+ * @param limit - Optional maximum number of documents to return
+ * @returns {T} a json file with the id and all the fields in the collection of the updated document.
+ * @throws Error if the query fails
+ */
+export const getDocumentsByFieldValue = async (
+    collectionName: string,
+    fieldName: string,
+    fieldValue: FirestoreDataTypes,
+    limit?: number
+): Promise<object[]> => {
+    try {
+        let query: FirebaseFirestore.Query = db
+            .collection(collectionName)
+            .where(fieldName, "==", fieldValue);
+
+        // Apply limit if specified
+        if (limit && limit > 0) {
+            query = query.limit(limit);
+        }
+
+        const snapshot: FirebaseFirestore.QuerySnapshot = await query.get();
+
+        if (snapshot.empty) {
+            throw new RepositoryError(
+                `No documents found in collection ${collectionName} where ${fieldName} == ${String(
+                    fieldValue
+                )}`,
+                "DOCUMENTS_NOT_FOUND",
+                404
+            );
+        }
+
+        const documents = snapshot.docs.map(doc => ({
+            id: doc.id,
+            ...doc.data()
+        }));
+
+		return documents;
+
+    } catch (error: unknown) {
+        if (error instanceof RepositoryError) {
+            throw error;
+        }
+
+        throw new RepositoryError(
+            `Failed to fetch documents from ${collectionName} where ${fieldName} == ${String(
+                fieldValue
+            )}: ${getErrorMessage(error)}`,
+            getErrorCode(error),
+            getFirebaseErrorStatusCode(error)
+        );
+    }
 };
