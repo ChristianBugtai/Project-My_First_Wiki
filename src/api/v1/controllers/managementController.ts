@@ -47,7 +47,7 @@ export const approveEntry = <T>(pendingCollectionName: string, collectionName: s
         try{
             const data = await approvePendingEntry<T>(pendingCollectionName, collectionName, req.params.id)
 
-            res.status(HTTP_STATUS.CREATED).json(
+            res.status(HTTP_STATUS.OK).json(
                 successResponse(data, `entry ${req.params.id}, approved`)
             );
         } catch (error) {

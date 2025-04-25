@@ -77,7 +77,7 @@ router.get(
  *         required: true
  *         description: The ID of the pending item entry to approve
  *     responses:
- *       201:
+ *       200:
  *         description: entry {id}, approved
  *         content:
  *           application/json:
@@ -155,7 +155,7 @@ router.get(
  *         required: true
  *         description: The ID of the pending location entry to approve
  *     responses:
- *       201:
+ *       200:
  *         description: entry {id}, approved
  *         content:
  *           application/json:
@@ -233,7 +233,7 @@ router.get(
  *         required: true
  *         description: The ID of the pending monster entry to approve
  *     responses:
- *       201:
+ *       200:
  *         description: entry {id}, approved
  *         content:
  *           application/json:
@@ -313,7 +313,7 @@ router.get(
  *         required: true
  *         description: The ID of the pending treasure entry to approve
  *     responses:
- *       201:
+ *       200:
  *         description: entry {id}, approved
  *         content:
  *           application/json:
