@@ -65,3 +65,5 @@ router.put(
     isAuthorized({ hasRole: ["admin", "trustedContributor"] }),
     approveEntry<Treasure>(treasureCollection)
 );
+
+export default router;
