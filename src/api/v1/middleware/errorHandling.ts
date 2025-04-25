@@ -3,6 +3,15 @@ import { AppError } from "../errors/errors";
 import { HTTP_STATUS } from "../../../constants/httpConstants";
 import { errorResponse } from "../models/responseModel";
 
+/**
+ * Global error handling middleware for an Express application.
+ * Catches all errors passed to next() and formats them into a consistent response format.
+ *
+ * @param err - The error object passed from previous middleware or route handlers
+ * @param req - Express request object
+ * @param res - Express response object
+ * @param _next - Express next function (unused but required for Express error middleware signature)
+ **/
 const errorHandler = (
     err: Error | null,
     req: Request,
