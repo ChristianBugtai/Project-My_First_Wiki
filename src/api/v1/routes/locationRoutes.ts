@@ -11,7 +11,6 @@ import {
     deleteEntry
 } from "../controllers/entryController"
 import { updatePendingEntry } from "../controllers/pendingController";
-import redirectUnauthorized from "../middleware/redirectUnauthorized";
 
 const router: Router = express.Router();
 
@@ -148,7 +147,7 @@ router.post(
 router.put(
     "/:id",
     authenticate,
-    redirectUnauthorized("/pending/:id"),
+    isAuthorized({ hasRole: ["admin", "trustedContributor"] }),
     updateEntry<Location>(COLLECTION)
 );
 
