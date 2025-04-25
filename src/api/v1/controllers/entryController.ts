@@ -34,7 +34,7 @@ export const getEntryById = <T>(collectionName: string) => {
  * @param {string} collectionName name of the firebase collection 
  * @returns {promise<void>}
  */
-export const getEntries = <T>(collectionName: string) => {
+export const getEntries = <T extends object>(collectionName: string) => {
     return async (
         req: Request, 
         res: Response, 
