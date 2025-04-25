@@ -7,63 +7,66 @@ import { approveEntry, getPendingEntries } from "../controllers/managementContro
 
 const router: Router = express.Router();
 
-const [itemCollection, locationCollection, monsterCollection, treasureCollection] 
-    = ["itemPending", "locationPending", "monsterPending", "treasurePending"] 
+const [itemCollection, locationCollection, monsterCollection, treasureCollection]
+    = ["Item", "Location", "Monster", "Treasure"]
+
+const [pendingItemCollection, pendingLocationCollection, pendingMonsterCollection, pendingTreasureCollection] 
+    = ["itemPending", "locationPending", "monsterPending", "treasurePending"]
 
 router.get(
     "/items/:id",
     authenticate,
     isAuthorized({ hasRole: ["admin", "trustedContributor"] }),
-    getPendingEntries(itemCollection)
+    getPendingEntries(pendingItemCollection)
 );
 
-router.put(
+router.get(
     "/items/approve/:id",
     authenticate,
     isAuthorized({ hasRole: ["admin", "trustedContributor"] }),
-    approveEntry<Item>(itemCollection)
+    approveEntry<Item>(pendingItemCollection, itemCollection)
 );
 
 router.get(
     "/locations/:id",
     authenticate,
     isAuthorized({ hasRole: ["admin", "trustedContributor"] }),
-    getPendingEntries(locationCollection)
+    getPendingEntries(pendingLocationCollection)
 );
 
-router.put(
+router.get(
     "/locations/approve/:id",
     authenticate,
     isAuthorized({ hasRole: ["admin", "trustedContributor"] }),
-    approveEntry<Location>(locationCollection)
+    approveEntry<Location>(pendingLocationCollection, locationCollection)
 );
 
 router.get(
     "/monsters/:id",
     authenticate,
     isAuthorized({ hasRole: ["admin", "trustedContributor"] }),
-    getPendingEntries(monsterCollection)
+    getPendingEntries(pendingMonsterCollection)
 );
 
-router.put(
+router.get(
     "/monsters/approve/:id",
     authenticate,
     isAuthorized({ hasRole: ["admin", "trustedContributor"] }),
-    approveEntry<Monster>(monsterCollection)
+    approveEntry<Monster>(pendingMonsterCollection, monsterCollection)
 );
 
 router.get(
     "/treasures/:id",
     authenticate,
     isAuthorized({ hasRole: ["admin", "trustedContributor"] }),
-    getPendingEntries(treasureCollection)
+    getPendingEntries(pendingTreasureCollection)
 );
 
-router.put(
+router.get(
     "/treasures/approve/:id",
     authenticate,
     isAuthorized({ hasRole: ["admin", "trustedContributor"] }),
-    approveEntry<Treasure>(treasureCollection)
+    approveEntry<Treasure>(pendingTreasureCollection, treasureCollection)
 );
 
 export default router;
