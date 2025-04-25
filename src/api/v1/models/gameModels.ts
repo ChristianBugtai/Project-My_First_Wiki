@@ -1,3 +1,5 @@
+import { Timestamp } from "firebase-admin/firestore";
+
 /**
  * @interface Item
  * @description Represents an item object.
@@ -21,12 +23,17 @@
  *         price:
  *           type: string
  *           description: The price of the item (optional)
+ *         datetime:
+ *           type: string
+ *           format: date-time
+ *           description: The Firestore timestamp when the item was created or updated (optional)
  */
 export type Item = {
     name:string;
     description: string;
     img: string;
     price?: string
+    datetime?: Timestamp;
 };
 
 /**
@@ -52,12 +59,17 @@ export type Item = {
  *         health:
  *           type: string
  *           description: The health value of the monster (optional)
+ *         datetime:
+ *           type: string
+ *           format: date-time
+ *           description: The Firestore timestamp when the item was created or updated (optional)
  */
 export type Monster = {
     name:string;
     description: string;
     img: string;
     health?: string
+    datetime?: Timestamp;
 };
 
 /**
@@ -80,11 +92,16 @@ export type Monster = {
  *           type: string
  *           format: uri
  *           description: A URL to an image representing the location
+ *         datetime:
+ *           type: string
+ *           format: date-time
+ *           description: The Firestore timestamp when the item was created or updated (optional)
  */
 export type Location = {
     name:string;
     description: string;
     img: string;
+    datetime?: Timestamp;
 };
 
 /**
@@ -110,10 +127,15 @@ export type Location = {
  *         value:
  *           type: string
  *           description: The value of the treasure (optional)
+ *         datetime:
+ *           type: string
+ *           format: date-time
+ *           description: The Firestore timestamp when the item was created or updated (optional)
  */
 export type Treasure = {
     name:string;
     description: string;
     img: string;
     value?: string
+    datetime?: Timestamp;
 };
